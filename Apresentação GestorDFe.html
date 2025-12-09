@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor DFe - Sistema de Gestão de Documentos Fiscais</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .slide {
+            display: none;
+            min-height: 100vh;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 3rem;
+            min-height: 80vh;
+            position: relative;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 1rem;
+        }
+        
+        h1 {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        h2 {
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        h3 {
+            color: var(--primary);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .tech-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin: 0.5rem;
+        }
+        
+        .benefit-card {
+            border-left: 4px solid var(--secondary);
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .nav-buttons {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+        }
+        
+        .btn-nav {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-left: 0.5rem;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-nav:hover {
+            background-color: var(--primary);
+            transform: scale(1.1);
+        }
+        
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: #e0e0e0;
+            z-index: 101;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: var(--secondary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .slide-indicator {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background-color: rgba(255,255,255,0.8);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            z-index: 102;
+        }
+        
+        .flow-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .flow-step {
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+            margin: 0.5rem;
+        }
+        
+        .flow-arrow {
+            font-size: 2rem;
+            color: var(--secondary);
+        }
+        
+        .architecture-diagram {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+        
+        .highlight {
+            background-color: #e3f2fd;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .slide-content {
+                padding: 1.5rem;
+            }
+            
+            .flow-arrow {
+                display: none;
+            }
+            
+            .flow-step {
+                flex: 100%;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <div class="slide-indicator" id="slideIndicator">Slide 1 de 12</div>
+    
+    <!-- Slide 1: Capa -->
+    <div class="slide active" id="slide1">
+        <div class="slide-content d-flex flex-column justify-content-center align-items-center text-center">
+            <div class="header">
+                <h1><i class="fas fa-file-invoice-dollar"></i> Gestor de DFe</h1>
+                <h2>Sistema de Gestão de Documentos Fiscais Eletrônicos</h2>
+                <p class="lead">Desenvolvido em Blazor .NET 8</p>
+            </div>
+            <div class="mt-4">
+                <img src="https://cdn-icons-png.flaticon.com/512/3067/3067892.png" alt="Documentos Fiscais" width="150" class="mb-4">
+            </div>
+            <div class="mt-auto">
+                <p class="text-muted">Uma solução completa para gestão de NF-e, CT-e e MDF-e</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 2: Agenda -->
+    <div class="slide" id="slide2">
+        <div class="slide-content">
+            <div class="header">
+                <h2>Agenda da Apresentação</h2>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <ol class="list-group list-group-numbered">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Contexto e Objetivo</div>
+                                O desafio da gestão fiscal digital
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Público-Alvo</div>
+                                Empresas que precisam gerenciar documentos fiscais
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Funcionalidades Principais</div>
+                                Upload, validação, consulta e gestão
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Benefícios do Sistema</div>
+                                Agilidade, centralização e segurança
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+                <div class="col-md-6">
+                    <ol class="list-group list-group-numbered" start="5">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Demonstração do Fluxo</div>
+                                Upload, processamento e consulta
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Tecnologias Utilizadas</div>
+                                Blazor, .NET 8, Entity Framework
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Diferenciais do Sistema</div>
+                                Comparação com soluções tradicionais
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Próximos Passos</div>
+                                Roadmap e contato
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 3: Contexto e Objetivo -->
+    <div class="slide" id="slide3">
+        <div class="slide-content">
+            <div class="header">
+                <h2>Contexto e Objetivo</h2>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h3><i class="fas fa-exclamation-triangle text-warning"></i> Desafio Atual</h3>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <i class="fas fa-chart-line text-primary me-2"></i>
+                            Empresas lidam com volume crescente de documentos fiscais
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-clock text-primary me-2"></i>
+                            Dificuldade em organizar e validar XMLs manualmente
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-plug text-primary me-2"></i>
+                            Complexidade na integração com SEFAZ
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-search text-primary me-2"></i>
+                            Dificuldade em localizar documentos específicos
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h3><i class="fas fa-bullseye text-success"></i> Objetivo do Gestor de DFe</h3>
+                    <div class="benefit-card">
+                        <h4><i class="fas fa-layer-group text-success me-2"></i>Centralização</h4>
+                        <p>Gestão unificada de NF-e, CT-e e MDF-e em uma única plataforma</p>
+                    </div>
+                    <div class="benefit-card">
+                        <h4><i class="fas fa-robot text-success me-2"></i>Automação</h4>
+                        <p>Processamento automático de validação e consulta de documentos</p>
+                    </div>
+                    <div class="benefit-card">
+                        <h4><i class="fas fa-chart-pie text-success me-2"></i>Inteligência</h4>
+                        <p>Dashboard com insights e métricas fiscais em tempo real</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 4: Público-Alvo -->
+    <div class="slide" id="slide4">
+        <div class="slide-content">
+            <div class="header">
+                <h2>Público-Alvo</h2>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-3 text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h4>Contabilidade</h4>
+                    <p>Gestão de documentos de múltiplos clientes com relatórios setorizados</p>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h4>Logística</h4>
+                    <p>Controle eficiente de CT-e e MDF-e para operações de transporte</p>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <h4>Varejo/Distribuição</h4>
+                    <p>Gestão massiva de NF-e com integração a sistemas ERP</p>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-contract"></i>
+                    </div>
+                    <h4>Departamento Fiscal</h4>
+                    <p>Análise, validação e auditoria de documentos fiscais</p>
+                </div>
+            </div>
+            <div class="mt-4 p-3 bg-light rounded">
+                <h5 class="text-center"><i class="fas fa-industry me-2"></i>Setores Atendidos</h5>
+                <p class="text-center mb-0">Todos os segmentos sujeitos à obrigatoriedade fiscal digital</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 5: Funcionalidades Principais -->
+    <div class="slide" id="slide5">
+        <div class="slide-content">
+            <div class="header">
+                <h2>Funcionalidades Principais</h2>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-upload fa-2x text-primary me-3 mt-1"></i>
+                        <div>
+                            <h4>Upload em Lote</h4>
+                            <p>Suporte a upload de múltiplos arquivos XML e ZIP simultaneamente</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-check-circle fa-2x text-success me-3 mt-1"></i>
+                        <div>
+                            <h4>Validação Automática</h4>
+                            <p>Verificação contra schemas XSD oficiais e validação de assinatura digital</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-search fa-2x text-info me-3 mt-1"></i>
+                        <div>
+                            <h4>Consulta SEFAZ</h4>
+                            <p>Verificação em tempo real do status de autorização na SEFAZ</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-tachometer-alt fa-2x text-warning me-3 mt-1"></i>
+                        <div>
+                            <h4>Dashboard Inteligente</h4>
+                            <p>Métricas e estatísticas fiscais com gráficos interativos</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-filter fa-2x text-secondary me-3 mt-1"></i>
+                        <div>
+                            <h4>Busca Avançada</h4>
+                            <p>Filtros por data, tipo, status, CNPJ e outros critérios</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-key fa-2x text-danger me-3 mt-1"></i>
+                        <div>
+                            <h4>Certificado Digital</h4>
+                            <p>Configuração e gestão simplificada de certificados A1 e A3</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 6: Funcionalidades Técnicas -->
+    <div class="slide" id="slide6">
+        <div class="slide-content">
+            <div class="header">
+                <h2>Funcionalidades Técnicas</h2>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h4>Processamento Inteligente</h4>
+                    <div class="bg-dark text-light p-3 rounded mb-3">
+                        <code class="text-light">
+                            public async Task&lt;ProcessamentoResult&gt; ValidarDocumento(XmlDocument xml)<br>
+                            {<br>
+                            &nbsp;&nbsp;// Validação schema XSD<br>
+                            &nbsp;&nbsp;// Verificação assinatura digital<br>
+                            &nbsp;&nbsp;// Consulta status SEFAZ<br>
+                            }
+                        </code>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <i class="fas fa-cogs text-primary me-2"></i>
+                            Processamento assíncrono em background
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-history text-primary me-2"></i>
+                            Logs detalhados de todas as operações
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h4>Recursos Avançados</h4>
+                    <div class="architecture-diagram">
+                        <h5><i class="fas fa-project-diagram me-2"></i>Arquitetura de Processamento</h5>
+                        <ul>
+                            <li>Upload → Validação → Consulta SEFAZ → Armazenamento → Dashboard</li>
+                            <li>Processamento paralelo para múltiplos documentos</li>
+                            <li>Fila de processamento com retry automático</li>
+                        </ul>
+                    </div>
+                    <div class="mt-3">
+                        <h5><i class="fas fa-shield-alt me-2"></i>Segurança e Confiabilidade</h5>
+                        <ul>
+                            <li>Backup automático de documentos</li>
+                            <li>Criptografia de dados sensíveis</li>
+                            <li>API REST para integração com outros sistemas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 7: Benefícios do Sistema -->
+    <div class="slide" id="slide7">
+        <div class="slide-content">
+            <div class="header">
+                <h2>Benefícios do Sistema</h2>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h3><i class="fas fa-briefcase text-primary"></i> Para o Negócio</h3>
+                    <div class="benefit-card">
+                        <h4><i class="fas fa-bolt text-warning me-2"></i>Agilidade</h4>
+                        <p>Redução de até <span class="highlight">80% no tempo de processamento</span> de documentos</p>
+                    </div>
+                    <div class="benefit-card">
+                        <h4><i class="fas fa-compress-arrows-alt text-info me-2"></i>Centralização</h4>
+                        <p>Todos os documentos fiscais em <span class="highlight">uma única plataforma</span></p>
+                    </div>
+                    <div class="benefit-card">
+                        <h4><i class="fas fa-lock text-success me-2"></i>Segurança</h4>
+                        <p>Dados protegidos e <span class="highlight">compliance fiscal garantido</span></p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h3><i class="fas fa-users-cog text-secondary"></i> Para a Equipe Técnica</h3>
+                    <div class="benefit-card">
+                        <h4><i class="fas fa-code text-primary me-2"></i>Manutenibilidade</h4>
+                        <p>Código limpo, documentado e de fácil manutenção</p>
+                    </div>
+                    <div class="benefit-card">
+                        <h4><i class="fas fa-expand-arrows-alt text-info me-2"></i>Escalabilidade</h4>
+                        <p>Arquitetura preparada para <span class="highlight">crescimento e alto volume</span></p>
+                    </div>
+                    <div class="benefit-card">
+                        <h4><i class="fas fa-tachometer-alt text-warning me-2"></i>Performance</h4>
+                        <p>Otimizado para processamento de <span class="highlight">grandes volumes de dados</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 8: Demonstração do Fluxo -->
+    <div class="slide" id="slide8">
+        <div class="slide-content">
+            <div class="header">
+                <h2>Demonstração do Fluxo Principal</h2>
+            </div>
+            
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="feature-icon">
+                        <i class="fas fa-upload"></i>
+                    </div>
+                    <h4>1. Upload</h4>
+                    <p>Seleção de arquivos XML/ZIP via drag-and-drop ou navegador</p>
+                </div>
+                <div class="flow-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <div class="flow-step">
+                    <div class="feature-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h4>2. Processamento</h4>
+                    <p>Validação automática contra schema e consulta SEFAZ</p>
+                </div>
+                <div class="flow-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <div class="flow-step">
+                    <div class="feature-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h4>3. Armazenamento</h4>
+                    <p>Indexação e armazenamento seguro com metadados</p>
+                </div>
+                <div class="flow-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <div class="flow-step">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h4>4. Dashboard</h4>
+                    <p>Visualização em tempo real com estatísticas e alertas</p>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h4><i class="fas fa-desktop me-2"></i>Interface de Upload</h4>
+                    <div class="bg-light p-3 rounded">
+                        <p>Interface intuitiva com:</p>
+                        <ul>
+                            <li>Arraste e solte de arquivos</li>
+                            <li>Seleção múltipla</li>
+                            <li>Progresso individual por arquivo</li>
+                            <li>Validação imediata de formato</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h4><i class="fas fa-search me-2"></i>Painel de Consulta</h4>
+                    <div class="bg-light p-3 rounded">
+                        <p>Recursos avançados de busca:</p>
+                        <ul>
+                            <li>Filtros por data, tipo, status</li>
+                            <li>Busca por chave de acesso</li>
+                            <li>Visualização detalhada do XML</li>
+                            <li>Exportação de relatórios</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 9: Dashboard e Analytics -->
+    <div class="slide" id="slide9">
+        <div class="slide-content">
+            <div class="header">
+                <h2>Dashboard e Analytics</h2>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-8">
+                    <div class="bg-light p-3 rounded mb-3">
+                        <h4><i class="fas fa-tachometer-alt me-2"></i>Visão Geral em Tempo Real</h4>
+                        <p>Painel central com todas as métricas fiscais importantes</p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-chart-pie me-2"></i>Métricas Principais</h5>
+                            <ul class="list-group">
+                                <li class="list-group-item">Total de documentos por status</li>
+                                <li class="list-group-item">Volume mensal/anual</li>
+                                <li class="list-group-item">Estatísticas por tipo (NF-e, CT-e, MDF-e)</li>
+                                <li class="list-group-item">Taxa de sucesso/autorização</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-bell me-2"></i>Alertas e Notificações</h5>
+                            <ul class="list-group">
+                                <li class="list-group-item">Documentos com pendências</li>
+                                <li class="list-group-item">Validações com erro</li>
+                                <li class="list-group-item">Consultas SEFAZ com falha</li>
+                                <li class="list-group-item">Alertas de contingência</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-primary text-white p-3 rounded text-center">
+                        <h4>Exemplo Visual</h4>
+                        <div class="mt-3 p-2 bg-white text-dark rounded">
+                            <p class="mb-1"><strong>Documentos Hoje:</strong> 47</p>
+                            <div class="progress mb-2">
+                                <div class="progress-bar bg-success" style="width: 85%">85% Autorizado</div>
+                            </div>
+                            <p class="mb-1"><strong>NF-e:</strong> 32</p>
+                            <p class="mb-1"><strong>CT-e:</strong> 12</p>
+                            <p class="mb-0"><strong>MDF-e:</strong> 3</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 10: Tecnologias Utilizadas -->
+    <div class="slide" id="slide10">
+        <div class="slide-content">
+            <div class="header">
+                <h2>Tecnologias Utilizadas</h2>
+            </div>
+            <div class="row mt-4 text-center">
+                <div class="col-md-3">
+                    <i class="fab fa-microsoft tech-icon"></i>
+                    <h4>Blazor .NET 8</h4>
+                    <p>Framework moderno para aplicações web interativas</p>
+                </div>
+                <div class="col-md-3">
+                    <i class="fas fa-server tech-icon"></i>
+                    <h4>ASP.NET Core</h4>
+                    <p>API robusta e de alta performance</p>
+                </div>
+                <div class="col-md-3">
+                    <i class="fas fa-database tech-icon"></i>
+                    <h4>SQL Server</h4>
+                    <p>Banco de dados relacional enterprise</p>
+                </div>
+                <div class="col-md-3">
+                    <i class="fas fa-code tech-icon"></i>
+                    <h4>Entity Framework</h4>
+                    <p>ORM para mapeamento objeto-relacional</p>
+                </div>
+            </div>
+            <div class="row mt-4 text-center">
+                <div class="col-md-4">
+                    <i class="fab fa-bootstrap tech-icon"></i>
+                    <h4>Bootstrap 5</h4>
+                    <p>Framework CSS para interface responsiva</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-shield-alt tech-icon"></i>
+                    <h4>Identity Framework</h4>
+                    <p>Sistema de autenticação e autorização</p>
+                </div>
+                <div class="col-md-4">
+                    <i classfab fa-docker tech-icon"></i>
+                    <h4>Docker</h4>
+                    <p>Containerização para deploy consistente</p>
+                </div>
+            </div>
+            
+            <div class="architecture-diagram mt-4">
+                <h4><i class="fas fa-project-diagram me-2"></i>Arquitetura do Sistema</h4>
+                <div class="text-center">
+                    <p><strong>Cliente</strong> ←→ <strong>Blazor Server</strong> ←→ <strong>API .NET</strong> ←→ <strong>SQL Server</strong></p>
+                    <p>↑</p>
+                    <p><strong>Serviços SEFAZ</strong> + <strong>Serviço de Background</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 11: Diferenciais do Sistema -->
+    <div class="slide" id="slide11">
+        <div class="slide-content">
+            <div class="header">
+                <h2>Diferenciais do Sistema</h2>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h3><i class="fas fa-star text-warning"></i> Gestor de DFe </h3>
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-success">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Interface moderna e responsiva
+                        </li>
+                        <li class="list-group-item list-group-item-success">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Processamento em tempo real
+                        </li>
+                        <li class="list-group-item list-group-item-success">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Atualizações automáticas
+                        </li>
+                        <li class="list-group-item list-group-item-success">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Custos reduzidos de licença
+                        </li>
+                        <li class="list-group-item list-group-item-success">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Integração nativa .NET
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h3><i class="fas fa-history text-secondary"></i> Sistemas Tradicionais</h3>
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-danger">
+                            <i class="fas fa-times-circle text-danger me-2"></i>
+                            Interfaces complexas e ultrapassadas
+                        </li>
+                        <li class="list-group-item list-group-item-danger">
+                            <i class="fas fa-times-circle text-danger me-2"></i>
+                            Processamento em lote (batch) lento
+                        </li>
+                        <li class="list-group-item list-group-item-danger">
+                            <i class="fas fa-times-circle text-danger me-2"></i>
+                            Manutenção manual frequente
+                        </li>
+                        <li class="list-group-item list-group-item-danger">
+                            <i class="fas fa-times-circle text-danger me-2"></i>
+                            Licenças caras e inflexíveis
+                        </li>
+                        <li class="list-group-item list-group-item-danger">
+                            <i class="fas fa-times-circle text-danger me-2"></i>
+                            Soluções genéricas não especializadas
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-4 p-3 bg-light rounded">
+                <h4><i class="fas fa-award text-warning me-2"></i>Vantagem Competitiva</h4>
+                <p>O Gestor de DFe foi desenvolvido especificamente para o ecossistema .NET brasileiro, com foco nas necessidades reais das empresas que precisam gerenciar documentos fiscais eletrônicos de forma eficiente e segura.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 12: Considerações Finais -->
+    <div class="slide" id="slide12">
+        <div class="slide-content d-flex flex-column justify-content-center">
+            <div class="header">
+                <h2>Considerações Finais</h2>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h4><i class="fas fa-question-circle text-primary me-2"></i>Por que escolher o nosso Gestor de DFe?</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <strong>Tecnologia moderna</strong> com .NET 8 e Blazor
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Foco específico</strong> em documentos fiscais eletrônicos
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Suporte especializado</strong> da equipe .NET
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Custo-benefício</strong> superior às soluções do mercado
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h4><i class="fas fa-road text-info me-2"></i>Próximos Passos</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <i class="fas fa-clock me-2"></i>Suporte técnico incluso por 30 dias após a entrega
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-rocket me-2"></i>Implementação do sistema com acompanhamento
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <h4><i class="fas fa-envelope me-2"></i>Contato e Informações</h4>
+                <p><strong>Gestor DFe</strong> | Amorim Soluções em Softwares | (21) 98231-3179</p>
+                <div class="mt-3">
+                     
+                </div>
+            </div>
+            
+            <div class="mt-auto text-center">
+                <p class="text-muted">Obrigado pela atenção! <i class="fas fa-smile"></i></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="nav-buttons">
+        <button class="btn btn-nav" id="prevBtn" title="Slide anterior">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="btn btn-nav" id="nextBtn" title="Próximo slide">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 12;
+        
+        const progressBar = document.getElementById('progressBar');
+        const slideIndicator = document.getElementById('slideIndicator');
+        
+        function updateSlide() {
+            // Esconder todos os slides
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            // Mostrar slide atual
+            document.getElementById(`slide${currentSlide}`).classList.add('active');
+            
+            // Atualizar barra de progresso
+            progressBar.style.width = `${(currentSlide / totalSlides) * 100}%`;
+            
+            // Atualizar indicador
+            slideIndicator.textContent = `Slide ${currentSlide} de ${totalSlides}`;
+        }
+        
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlide();
+            }
+        });
+        
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlide();
+            }
+        });
+        
+        // Navegação por teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                if (currentSlide < totalSlides) {
+                    currentSlide++;
+                    updateSlide();
+                }
+            } else if (e.key === 'ArrowLeft') {
+                if (currentSlide > 1) {
+                    currentSlide--;
+                    updateSlide();
+                }
+            }
+        });
+        
+        // Inicializar
+        updateSlide();
+    </script>
+</body>
+</html>
